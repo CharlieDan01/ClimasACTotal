@@ -1,0 +1,182 @@
+---
+// src/components/WhatsAppWidget.astro
+// Puedes definir variables aquí para cambiar el número o el mensaje fácilmente
+const phoneNumber = "14093549300";
+const message = "Hola, quisiera realizar una cotización de un Minisplit";
+const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+---
+
+<div class="whatsapp-widget-container">
+    <div class="whatsapp-chat-box" id="whatsappChatBox">
+        <div class="whatsapp-chat-header">
+            <div class="whatsapp-chat-title">
+                <i class="bi bi-whatsapp"></i> AC Total Houston
+            </div>
+            <button class="whatsapp-close-btn" id="closeWhatsapp" aria-label="Cerrar chat">&times;</button>
+        </div>
+        
+        <div class="whatsapp-chat-body">
+            <div class="whatsapp-chat-message">
+                <p>¡Hola! 👋 ¿En qué podemos ayudarte con tu clima hoy?</p>
+            </div>
+        </div>
+        
+        <div class="whatsapp-chat-footer">
+            <a href={whatsappLink} target="_blank" rel="noopener noreferrer" class="whatsapp-send-link">
+                <div class="whatsapp-input-fake">Escribe un mensaje...</div>
+                <div class="whatsapp-send-btn">
+                    <i class="bi bi-send-fill"></i>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <button class="whatsapp-float-btn" id="openWhatsapp" aria-label="Abrir chat">
+        <i class="bi bi-whatsapp"></i>
+    </button>
+</div>
+
+<script>
+    // Lógica para abrir y cerrar la ventana
+    const openBtn = document.getElementById('openWhatsapp');
+    const closeBtn = document.getElementById('closeWhatsapp');
+    const chatBox = document.getElementById('whatsappChatBox');
+
+    if (openBtn && closeBtn && chatBox) {
+        openBtn.addEventListener('click', () => {
+            chatBox.classList.add('active');
+            openBtn.style.transform = 'scale(0)';
+        });
+
+        closeBtn.addEventListener('click', () => {
+            chatBox.classList.remove('active');
+            openBtn.style.transform = 'scale(1)';
+        });
+    }
+</script>
+
+<style>
+    .whatsapp-widget-container {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 2000; /* Un nivel muy alto para que no lo tape nada */
+        font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    .whatsapp-float-btn {
+        width: 60px;
+        height: 60px;
+        background-color: #25d366;
+        color: white;
+        border-radius: 50%;
+        border: none;
+        font-size: 30px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .whatsapp-chat-box {
+        position: absolute;
+        bottom: 80px;
+        right: 0;
+        width: 320px;
+        background-color: #e5ddd5;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        overflow: hidden;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(20px) scale(0.9);
+        transition: all 0.3s ease;
+        transform-origin: bottom right;
+    }
+
+    .whatsapp-chat-box.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0) scale(1);
+    }
+
+    .whatsapp-chat-header {
+        background-color: #075e54;
+        color: white;
+        padding: 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .whatsapp-chat-title {
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .whatsapp-close-btn {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+    }
+
+    .whatsapp-chat-body {
+        padding: 20px;
+        height: 140px;
+        background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png');
+        background-size: contain;
+    }
+
+    .whatsapp-chat-message {
+        background-color: #ffffff;
+        padding: 10px 14px;
+        border-radius: 0 12px 12px 12px;
+        font-size: 0.95rem;
+        box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+        max-width: 90%;
+    }
+
+    .whatsapp-chat-footer {
+        background-color: #f0f0f0;
+        padding: 12px;
+    }
+
+    .whatsapp-send-link {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+    }
+
+    .whatsapp-input-fake {
+        flex-grow: 1;
+        background-color: white;
+        padding: 10px 16px;
+        border-radius: 24px;
+        color: #888;
+        font-size: 0.9rem;
+    }
+
+    .whatsapp-send-btn {
+        background-color: #00a884;
+        color: white;
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    @media (max-width: 400px) {
+        .whatsapp-chat-box {
+            width: 280px;
+        }
+    }
+</style>

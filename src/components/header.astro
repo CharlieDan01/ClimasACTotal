@@ -1,0 +1,48 @@
+---
+// src/components/header.astro
+import '../css/styles.css';
+
+const facebookLink = "https://www.facebook.com/profile.php?id=61570490063853";
+const instagramLink = "https://www.instagram.com/ac_total";
+---
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm sticky-top">
+  <div class="container-fluid px-3 px-md-5">
+    
+    <a class="navbar-brand d-flex align-items-center gap-2" href="/">
+      <img src="/img/ACclimaslogo.jpg" alt="Logo AC Total" class="rounded-circle" style="width: 55px; height: auto;" />
+      <span class="fw-bold fs-5 text-dark">AC Total</span>
+    </a>
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarNav">
+      
+      <div class="w-100 d-lg-flex align-items-center justify-content-between text-center text-lg-start mt-3 mt-lg-0">
+        
+        <div class="d-flex flex-column flex-lg-row align-items-center justify-content-center gap-3 mx-auto py-2 py-lg-0">
+          <a href="/" id="nav-home" class="nav-link fw-medium text-dark text-decoration-none px-2">Inicio</a>
+          <a href="/#about" class="nav-link fw-medium text-dark text-decoration-none px-2">Sobre Nosotros</a>
+          <a href="/#products" class="nav-link fw-medium text-dark text-decoration-none px-2">Productos</a>
+          <a href="/#services" class="nav-link fw-medium text-dark text-decoration-none px-2">Nuestros Servicios</a>
+        </div>
+        
+        <div class="d-flex flex-column flex-lg-row align-items-center justify-content-end gap-3 mt-2 mt-lg-0">
+          <a href="/#contacto" class="btn-contacto-nav w-100 w-lg-auto">Contacto</a>
+          <div class="d-flex gap-3 py-2 py-lg-0">
+            <a href={instagramLink} target="_blank" class="social-link" aria-label="Instagram">
+              <i class="bi bi-instagram fs-5"></i>
+            </a>
+            <a href={facebookLink} target="_blank" class="social-link" aria-label="Facebook">
+              <i class="bi bi-facebook fs-5"></i>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</nav>

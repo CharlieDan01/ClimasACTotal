@@ -1,0 +1,186 @@
+---
+// src/pages/index.astro
+import '../css/styles.css';
+import Footer from '../components/footer.astro';
+import Header from '../components/header.astro';
+import Productos from '../components/productos.astro';
+import WhatsAppWidget from '../components/WhatsAppWidget.astro';
+
+
+const phoneNumber = "14093549300";
+const message = "Hola, quisiera realizar una cotización de un Minisplit";
+const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+const facebookLink = "https://www.facebook.com/profile.php?id=61570490063853";
+const instagramLink = "https://www.instagram.com/ac_total";
+---
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AC Total Houston Ministplits.</title>
+    
+    <meta name="color-scheme" content="dark">
+    <meta name="darkreader-lock">
+    <link rel="icon" href="/img/ACclimaslogo.jpg" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+<body>
+<Header/>
+
+<section class="hero" id="home">
+    <div class="container-fluid hero-content px-4 px-md-5">
+        <div class="row justify-content-center justify-content-lg-end">
+            <div class="col-12 col-md-10 col-lg-5 text-center text-lg-end">
+                <h1 class="hero-title">Bienvenido a AC Total Houston Ministplits</h1>
+                <p class="hero-subtitle">Tu solución confiable para sistemas de climatización en Houston, TX.</p>
+                
+                <button id="translate-btn" class="btn btn-light text-dark mt-3 fw-bold px-4 py-2" style="border-radius: 30px; transition: all 0.3s ease;">
+                    <i class="bi bi-translate me-2" style="color: var(--ac-blue);"></i>
+                    <span id="translate-text">Translate to English</span>
+                    <span id="translate-spinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status" aria-hidden="true"></span>
+                </button>
+
+                <div id="google_translate_element" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="../js/translate.js"></script>
+
+<section class="about section-padding bg-light" id="about">
+    <div class="container text-center">
+        <h2 class="section-title">Sobre Nosotros</h2>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <p class="section-description">En AC Total Houston Ministplits, nos dedicamos a proporcionar soluciones de climatización de alta calidad para hogares y negocios en Houston, TX. Con años de experiencia en la industria, nuestro equipo de expertos está comprometido a ofrecer un servicio excepcional y productos confiables para mantener tu espacio cómodo durante todo el año.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="services section-padding" id="services">
+    <div class="container">
+        <h2 class="section-title text-center">Nuestros Servicios</h2>
+        
+        <div class="row g-4 mt-3">
+            
+            <div class="col-12 col-md-4">
+                <div class="service-item h-100"> <div class="service-icon"><i class="bi bi-fan"></i></div>
+                    <h3>Instalación de Minisplits</h3>
+                    <p>Ofrecemos instalación profesional de minisplits para mantener tu hogar fresco y cómodo.</p>
+                </div>
+            </div>
+            
+            <div class="col-12 col-md-4">
+                <div class="service-item h-100">
+                    <div class="service-icon"><i class="bi bi-tools"></i></div>
+                    <h3>Mantenimiento y Reparación</h3>
+                    <p>Servicios de mantenimiento y reparación para asegurar el rendimiento óptimo de tus sistemas de climatización.</p>
+                </div>
+            </div>
+            
+            <div class="col-12 col-md-4">
+                <div class="service-item h-100">
+                    <div class="service-icon"><i class="bi bi-chat-text"></i></div>
+                    <h3>Asesoramiento Personalizado</h3>
+                    <p>Te ayudamos a elegir la mejor solución de climatización para tus necesidades específicas.</p>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+<section class="warranties section-padding bg-ac-dark text-white" id="warranties">
+    <div class="container text-center">
+        <h2 class="section-title text-white">¿Por qué escogernos?</h2>
+        <p class="section-description text-white-50 mb-5">Ofrecemos garantías de calidad en todos nuestros servicios y productos. Confía en nuestro trabajo y disfruta de un clima perfecto en tu hogar o negocio.</p>
+
+        <div class="row g-4">
+            <div class="col-6 col-md-3">
+                <div class="warranty-card dark-card">
+                    <i class="bi bi-clock-history warranty-icon"></i>
+                    <h4 class="h5 mt-3">Servicio Rápido</h4>
+                    <p class="small text-white-50">Citas disponibles el mismo día</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="warranty-card dark-card">
+                    <i class="bi bi-person-badge warranty-icon"></i>
+                    <h4 class="h5 mt-3">Técnicos Certificados</h4>
+                    <p class="small text-white-50">Profesionales expertos de confianza</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="warranty-card dark-card">
+                    <i class="bi bi-shield-check warranty-icon"></i>
+                    <h4 class="h5 mt-3">Garantía Incluida</h4>
+                    <p class="small text-white-50">Tranquilidad en cada servicio</p>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="warranty-card dark-card">
+                    <i class="bi bi-stars warranty-icon"></i>
+                    <h4 class="h5 mt-3">Instalación Limpia</h4>
+                    <p class="small text-white-50">Dejamos tu espacio limpio y organizado</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+	<Productos/>
+
+    <WhatsAppWidget />
+
+
+<section class="contact-location section-padding" id="contacto">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-5 text-center text-lg-start">
+                <h2 class="section-title text-start">Contáctanos</h2>
+                <p class="section-description text-start">¿Tienes preguntas o necesitas una cotización? ¡Estamos aquí para ayudarte a encontrar la mejor solución para tu hogar!</p>
+                
+                <div class="contact-info mt-4">
+                    <p><i class="bi bi-geo-alt-fill text-ac-red me-2"></i> Houston, TX, United States, 77546</p>
+                    </div>
+                    <p><i class="bi bi-envelope-fill text-ac-red me-2"></i> <a href="mailto:info@ac-total.com" class="text-decoration-none">info@ac-total.com</a></p> 
+                <a href={whatsappLink} target="_blank" rel="noopener noreferrer" class="btn-whatsapp-custom mt-3">
+                    <i class="bi bi-whatsapp me-2"></i> Contactanos vía WhatsApp
+                </a>
+            </div>
+            
+            <div class="col-lg-7">
+                <div class="map-container shadow-sm rounded overflow-hidden">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d443088.0264028637!2d-95.7309440620822!3d29.817178000000005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8640b8b4488d8501%3A0xca0d02def365053b!2sHouston%2C%20TX%2C%20EE.%20UU.!5e0!3m2!1ses-419!2smx!4v1714589000000!5m2!1ses-419!2smx" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> 
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="social-connect py-5 bg-white">
+    <div class="container text-center">
+        <h2 class="section-title">¿Ya nos sigues en redes sociales?</h2>
+        <p class="section-description">¡Mantente al tanto de nuestras ofertas y tips de mantenimiento!</p>
+        
+        <div class="d-flex flex-wrap justify-content-center gap-3 mt-4">
+            <a href={facebookLink} target="_blank" class="social-btn-rect facebook-rect">
+                <i class="bi bi-facebook"></i> Facebook
+            </a>
+            <a href={instagramLink} target="_blank" class="social-btn-rect instagram-rect">
+                <i class="bi bi-instagram"></i> Instagram
+            </a>
+            <a href={whatsappLink} target="_blank" class="social-btn-rect whatsapp-rect">
+                <i class="bi bi-whatsapp"></i> WhatsApp
+            </a>
+        </div>
+    </div>
+</section>
+
+
+
+<Footer/>
