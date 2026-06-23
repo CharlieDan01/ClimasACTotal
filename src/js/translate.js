@@ -1,6 +1,6 @@
 // src/js/translate.js
 
-// 1. Diccionario Manual: Define aquí tus textos críticos
+// 1. Diccionario Manual: Se queda exactamente igual
 const diccionario = {
     'nav-home': { es: 'Inicio', en: 'Home' }
     /*
@@ -36,7 +36,6 @@ document.head.appendChild(script);
 
 document.addEventListener('DOMContentLoaded', () => {
     const translateBtn = document.getElementById('translate-btn');
-    const translateText = document.getElementById('translate-text');
     const translateSpinner = document.getElementById('translate-spinner');
 
     function getCookie(name) {
@@ -48,30 +47,46 @@ document.addEventListener('DOMContentLoaded', () => {
         document.cookie = `googtrans=${value}; path=/; domain=${window.location.hostname}`;
     }
 
-    // 1. Determinar el idioma
-    let currentLang = getCookie('googtrans') === '/es/en' ? 'en' : 'es';
-
-    // 2. APLICAR TRADUCCIÓN MANUAL AL INSTANTE (Sin esperar a Google)
-    aplicarTraduccionesManuales(currentLang);
-
-    // Ajustar el texto del botón
-    if (translateText) {
-        translateText.textContent = currentLang === 'es' ? 'Translate to English' : 'Ver en Español';
+    // NUEVA FUNCIÓN: Borra la cookie por completo para apagar Google Translate de raíz
+    function deleteTranslateCookie() {
+        document.cookie = "googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${window.location.hostname}`;
     }
 
-    // 3. Lógica del botón con recarga
+    // 1. Detectar el idioma real según la cookie de Google
+    // Si no hay cookie o no es /es/en, asumimos por defecto 'es'
+    let currentLang = getCookie('googtrans') === '/es/en' ? 'en' : 'es';
+
+    // 2. Aplicar los textos manuales del diccionario (Inicio -> Home)
+    aplicarTraduccionesManuales(currentLang);
+
+    // 3. POSICIÓN VISUAL INICIAL DEL SWITCH
+    if (translateBtn) {
+        if (currentLang === 'es') {
+            translateBtn.classList.remove('active'); // Círculo a la izquierda (México)
+        } else {
+            translateBtn.classList.add('active');    // Círculo a la derecha (USA)
+        }
+    }
+
+    // 4. LÓGICA DEL CLIC CORREGIDA
     if (translateBtn) {
         translateBtn.addEventListener('click', () => {
-            translateBtn.disabled = true;
-            translateSpinner.classList.remove('d-none');
-            translateText.textContent = 'Traduciendo...';
+            translateBtn.style.pointerEvents = 'none';
+            if (translateSpinner) translateSpinner.classList.remove('d-none');
 
+            // SI ESTÁ EN ESPAÑOL: Traducir a INGLÉS
             if (currentLang === 'es') {
-                setTranslateCookie('/es/en');
-            } else {
-                setTranslateCookie('/es/es');
+                translateBtn.classList.add('active'); 
+                setTranslateCookie('/es/en'); // Activamos traducción a Inglés
+            } 
+            // SI ESTÁ EN INGLÉS: Regresar a ESPAÑOL apagando el traductor
+            else {
+                translateBtn.classList.remove('active'); 
+                deleteTranslateCookie(); // ¡Aquí está la magia! Borramos la cookie para desactivar a Google
             }
 
+            // Recarga sutil de la página para que surta efecto limpio
             setTimeout(() => {
                 window.location.reload();
             }, 300);

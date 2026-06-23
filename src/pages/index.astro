@@ -4,6 +4,7 @@ import '../css/styles.css';
 import Footer from '../components/footer.astro';
 import Header from '../components/header.astro';
 import Productos from '../components/productos.astro';
+import Galerias from '../components/galerias.astro';
 import WhatsAppWidget from '../components/WhatsAppWidget.astro';
 
 
@@ -25,7 +26,7 @@ const instagramLink = "https://www.instagram.com/ac_total";
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
-<body>
+<>
 <Header/>
 
 <section class="hero" id="home">
@@ -34,14 +35,6 @@ const instagramLink = "https://www.instagram.com/ac_total";
             <div class="col-12 col-md-10 col-lg-5 text-center text-lg-end">
                 <h1 class="hero-title">Bienvenido a AC Total Houston Ministplits</h1>
                 <p class="hero-subtitle">Tu solución confiable para sistemas de climatización en Houston, TX.</p>
-                
-                <button id="translate-btn" class="btn btn-light text-dark mt-3 fw-bold px-4 py-2" style="border-radius: 30px; transition: all 0.3s ease;">
-                    <i class="bi bi-translate me-2" style="color: var(--ac-blue);"></i>
-                    <span id="translate-text">Translate to English</span>
-                    <span id="translate-spinner" class="spinner-border spinner-border-sm ms-2 d-none" role="status" aria-hidden="true"></span>
-                </button>
-
-                <div id="google_translate_element" style="display: none;"></div>
             </div>
         </div>
     </div>
@@ -180,6 +173,8 @@ const instagramLink = "https://www.instagram.com/ac_total";
         </div>
     </div>
 </section>
+
+<Galerias/>
 
 
 
