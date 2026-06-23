@@ -1,104 +1,75 @@
 ---
 // src/components/galeria.astro
-
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQjFlIqlgR9G13ldqNX5EevnC4LGNCBBmf30i7wRVLc69NjGmORr4gh6fPney9eZJwY1J58IaVrKhXK/pub?gid=1611733690&single=true&output=csv';
-
-let imagenes: any[] = [];
-
-// Función mejorada a prueba de balas para atrapar el ID de Drive
-function obtenerLinkDirectoDrive(urlDrive) {
-    if (!urlDrive) return '';
-    
-    // Extrae el ID del archivo de la URL
-    const match = urlDrive.match(/\/d\/([a-zA-Z0-9_-]+)/);
-    
-    if (match && match[1]) {
-        const directUrl = `https://drive.google.com/uc?export=view&id=${match[1]}`;
-        // ¡Esta línea debe estar activa para evitar el error de CORS!
-        return `https://images.weserv.nl/?url=${encodeURIComponent(directUrl)}`;
-    }
-    return urlDrive;
-}
-
-try {
-    const response = await fetch(SHEET_URL);
-    const csvText = await response.text();
-    
-    const lines = csvText.split('\n').filter(line => line.trim().length > 0);
-    
-    if (lines.length > 1) {
-        // Limpieza EXTREMA de encabezados (quita caracteres invisibles, comillas y saltos)
-        const headers = lines[0].split(',').map(h => h.replace(/[\r\n\uFEFF'"]/g, '').trim());
-        
-        imagenes = lines.slice(1).map(line => {
-            const values = line.split(',');
-            const rowObject: { [key: string]: string } = {};
-            
-            headers.forEach((header, index) => {
-                if (header) {
-                    // Limpieza extrema también para los valores (el link)
-                    rowObject[header] = values[index] ? values[index].replace(/[\r\n'"]/g, '').trim() : '';
-                }
-            });
-            return rowObject;
-        });
-        
-        // IMPRESIÓN PARA DEPURAR: Esto aparecerá en tu terminal
-        //console.log("=== DATOS DE LA GALERÍA ===");
-        //console.log(imagenes);
-    }
-} catch (error) {
-    console.error("Error al conectar con la Galería:", error);
-}
 ---
 
 <section class="galeria-section py-5 bg-light" id="galeria">
     <div class="container">
         <h2 class="section-title text-center text-ac-blue fw-bold mb-3">Nuestra Galería</h2>
-        <p class="section-description text-center mx-auto mb-5 text-muted">Un vistazo a nuestras instalaciones y trabajos de climatización recientes.</p>
+        <p class="section-description text-center mx-auto mb-5 text-muted">Un vistazo a nuestras instalaciones y trabajos recientes.</p>
 
-        {imagenes.length === 0 ? (
-            <p class="text-center text-muted mt-4">Cargando imágenes...</p>
-        ) : (
-            <div id="carouselGaleria" class="carousel slide" data-bs-ride="carousel">
-                
-                <div class="carousel-inner rounded shadow-sm border bg-white">
-                    {imagenes.map((imgItem, index) => (
-                        // El primer elemento debe llevar la clase 'active' para que se muestre al inicio
-                        <div class={`carousel-item ${index === 0 ? 'active' : ''}`}>
-                            <img 
-                                src={obtenerLinkDirectoDrive(imgItem.Imagen)} 
-                                class="d-block w-100 slider-main-img" 
-                                alt={`Trabajo de climatización ${index + 1}`} 
-                            />
-                        </div>
-                    ))}
-                </div>
-
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselGaleria" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon bg-dark rounded-circle p-3 shadow" aria-hidden="true"></span>
-                    <span class="visually-hidden">Anterior</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselGaleria" data-bs-slide="next">
-                    <span class="carousel-control-next-icon bg-dark rounded-circle p-3 shadow" aria-hidden="true"></span>
-                    <span class="visually-hidden">Siguiente</span>
-                </button>
-
-                <div class="carousel-indicators thumbnail-indicators">
-                    {imagenes.map((imgItem, index) => (
-                        <button 
-                            type="button" 
-                            data-bs-target="#carouselGaleria" 
-                            data-bs-slide-to={index} 
-                            class={index === 0 ? 'active' : ''} 
-                            aria-current={index === 0 ? 'true' : 'false'} 
-                            aria-label={`Slide ${index + 1}`}
-                        >
-                            <img src={obtenerLinkDirectoDrive(imgItem.Imagen)} class="img-fluid" alt={`Miniatura ${index + 1}`} />
-                        </button>
-                    ))}
-                </div>
-            </div>
-        )}
+        <div id="galeria-contenedor">
+            <p class="text-center text-muted mt-4">Cargando galería...</p>
+        </div>
     </div>
 </section>
+
+<script>
+    const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQjFlIqlgR9G13ldqNX5EevnC4LGNCBBmf30i7wRVLc69NjGmORr4gh6fPney9eZJwY1J58IaVrKhXK/pub?gid=1611733690&single=true&output=csv';
+    const contenedor = document.getElementById('galeria-contenedor');
+
+    function obtenerLinkDirectoDrive(urlDrive) {
+        if (!urlDrive) return '';
+        const match = urlDrive.match(/\/d\/([a-zA-Z0-9_-]+)/);
+        if (match && match[1]) {
+            const directUrl = `https://drive.google.com/uc?export=view&id=${match[1]}`;
+            return `https://images.weserv.nl/?url=${encodeURIComponent(directUrl)}`;
+        }
+        return urlDrive;
+    }
+
+    async function cargarGaleria() {
+        try {
+            const response = await fetch(SHEET_URL);
+            const csvText = await response.text();
+            const lines = csvText.split('\n').filter(line => line.trim().length > 0);
+            const headers = lines[0].split(',').map(h => h.replace(/[\r\n\uFEFF'"]/g, '').trim());
+            
+            const imagenes = lines.slice(1).map(line => {
+                const values = line.split(',');
+                const obj: any = {};
+                headers.forEach((h, i) => obj[h] = values[i]?.replace(/[\r\n'"]/g, '').trim() || '');
+                return obj;
+            });
+
+            // Generar HTML dinámico
+            contenedor.innerHTML = `
+                <div id="carouselGaleria" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner rounded shadow-sm border bg-white">
+                        ${imagenes.map((img, i) => `
+                            <div class="carousel-item ${i === 0 ? 'active' : ''}">
+                                <img src="${obtenerLinkDirectoDrive(img.Imagen)}" class="d-block w-100 slider-main-img" alt="Trabajo ${i + 1}">
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselGaleria" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon bg-dark rounded-circle p-3 shadow" aria-hidden="true"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselGaleria" data-bs-slide="next">
+                        <span class="carousel-control-next-icon bg-dark rounded-circle p-3 shadow" aria-hidden="true"></span>
+                    </button>
+                    <div class="carousel-indicators thumbnail-indicators">
+                        ${imagenes.map((img, i) => `
+                            <button type="button" data-bs-target="#carouselGaleria" data-bs-slide-to="${i}" class="${i === 0 ? 'active' : ''}">
+                                <img src="${obtenerLinkDirectoDrive(img.Imagen)}" class="img-fluid" alt="Miniatura ${i + 1}">
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        } catch (e) {
+            contenedor.innerHTML = '<p class="text-center text-danger">Error al cargar la galería.</p>';
+        }
+    }
+
+    cargarGaleria();
+</script>

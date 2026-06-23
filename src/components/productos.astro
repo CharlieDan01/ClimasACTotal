@@ -1,119 +1,82 @@
 ---
 // src/components/productos.astro
-
-// Tu enlace de Google Sheets CSV
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQjFlIqlgR9G13ldqNX5EevnC4LGNCBBmf30i7wRVLc69NjGmORr4gh6fPney9eZJwY1J58IaVrKhXK/pub?gid=0&single=true&output=csv';
-
-let productos: any[] = [];
-
-try {
-    const response = await fetch(SHEET_URL);
-    const csvText = await response.text();
-    
-    const lines = csvText.split('\n').map(line => line.trim()).filter(line => line.length > 0);
-    if (lines.length > 1) {
-        const headers = lines[0].split(',');
-        
-        productos = lines.slice(1).map(line => {
-            const values = line.split(',');
-            const rowObject: { [key: string]: string } = {};
-            headers.forEach((header, index) => {
-                rowObject[header.trim()] = values[index] ? values[index].replace(/^"|"$/g, '').trim() : '';
-            });
-            return rowObject;
-        });
-    }
-} catch (error) {
-    console.error("Error al conectar con Google Sheets en el componente Productos:", error);
-}
 ---
 
 <section class="productos section-padding bg-light text-center" id="products">
     <div class="container">
         <h2 class="section-title">Nuestros Productos</h2>
-        <p class="section-description">Equipos de climatización de alta eficiencia disponibles para instalación inmediata.</p>
+        <p class="section-description">Equipos de climatización de alta eficiencia.</p>
         
-        <div class="row g-4 mt-4 justify-content-center">
-            {productos.length === 0 ? (
-                <div class="col-12">
-                    <p class="text-muted">Cargando catálogo de productos...</p>
-                </div>
-            ) : (
-                productos.map((producto, index) => {
-                    const modalId = `modalProducto${index}`;
-                    const whatsappUrl = `https://wa.me/14093549300?text=Hola,%20me%20interesa%20información%20sobre%20el%20producto:%20${encodeURIComponent(producto.Product)}`;
-                    
-                    return (
-                        <div class="col-12 col-md-4 text-start">
-                            
-                            <div class="card h-100 shadow-sm border-0 service-item" style="border-top: 4px solid var(--ac-blue); padding: 0; overflow: hidden;">
-                                
-                                <div class="product-img-wrapper" style="height: 220px; overflow: hidden; background-color: #ffffff; display: flex; align-items: center; justify-content: center; padding: 10px;">
-                                    <img 
-                                        src={producto.img || '/img/ACclimaslogo.jpg'} 
-                                        class="w-100 h-100" 
-                                        style="object-fit: contain;" 
-                                        alt={producto.Product} 
-                                    />
-                                </div>
-                                
-                                <div class="card-body p-4 d-flex flex-column justify-content-between">
-                                    <div>
-                                        <h5 class="card-title fw-bold text-ac-blue mb-2 text-center text-md-start" style="font-size: 1.2rem;">
-                                            {producto.Product}
-                                        </h5>
-                                        </div>
-                                    
-                                    <div>
-                                        <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
-                                            <span class="text-muted small">Precio</span>
-                                            <span class="fw-bold text-ac-red h5 mb-0">{producto.Price}</span>
-                                        </div>
-                                        <button type="button" class="btn btn-outline-dark w-100 mt-3 fw-bold" data-bs-toggle="modal" data-bs-target={`#${modalId}`}>
-                                            Mostrar más detalles
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="modal fade" id={modalId} tabindex="-1" aria-labelledby={`${modalId}Label`} aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered modal-lg">
-                                    <div class="modal-content border-0 shadow-lg">
-                                        <div class="modal-header border-bottom-0 pb-0">
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                                        </div>
-                                        
-                                        <div class="modal-body p-4 pt-2">
-                                            <div class="row align-items-center">
-                                                <div class="col-md-5 text-center mb-4 mb-md-0">
-                                                    <img src={producto.img || '/img/ACclimaslogo.jpg'} class="img-fluid rounded" style="max-height: 300px; object-fit: contain;" alt={producto.Product} />
-                                                </div>
-                                                
-                                                <div class="col-md-7">
-                                                    <h3 class="fw-bold text-ac-blue mb-3" id={`${modalId}Label`}>{producto.Product}</h3>
-                                                    
-                                                    <p class="text-muted mb-4" style="line-height: 1.6;">
-                                                        {producto.Description}
-                                                    </p>
-                                                    
-                                                    <div class="d-flex align-items-center mb-4 p-3 bg-light rounded border">
-                                                        <span class="text-muted me-auto">Precio de Venta:</span>
-                                                        <span class="fw-bold text-ac-red fs-4 mb-0">{producto.Price}</span>
-                                                    </div>
-                                                    
-                                                    <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp-custom w-100 d-flex justify-content-center align-items-center" style="font-size: 1.1rem; padding: 12px;">
-                                                        <i class="bi bi-whatsapp me-2 fs-5"></i> Solicitar Cotización
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            </div>
-                    );
-                })
-            )}
+        <div id="productos-grid" class="row g-4 mt-4 justify-content-center">
+            <div class="col-12">
+                <p class="text-muted">Cargando catálogo...</p>
+            </div>
         </div>
     </div>
 </section>
+
+<script>
+    const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQjFlIqlgR9G13ldqNX5EevnC4LGNCBBmf30i7wRVLc69NjGmORr4gh6fPney9eZJwY1J58IaVrKhXK/pub?gid=0&single=true&output=csv';
+    const grid = document.getElementById('productos-grid');
+
+    async function cargarProductos() {
+        try {
+            const response = await fetch(SHEET_URL);
+            const csvText = await response.text();
+            const lines = csvText.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            const headers = lines[0].split(',');
+            
+            const productos = lines.slice(1).map(line => {
+                const values = line.split(',');
+                const obj: any = {};
+                headers.forEach((h, i) => obj[h.trim()] = values[i]?.replace(/^"|"$/g, '').trim() || '');
+                return obj;
+            });
+
+            // Renderizado dinámico
+            grid.innerHTML = productos.map((p, i) => `
+                <div class="col-12 col-md-4 text-start">
+                    <div class="card h-100 shadow-sm border-0 service-item" style="border-top: 4px solid var(--ac-blue);">
+                        <div class="product-img-wrapper" style="height: 220px; overflow: hidden; display: flex; align-items: center; justify-content: center; padding: 10px;">
+                            <img src="${p.img || '/img/ACclimaslogo.jpg'}" class="w-100 h-100" style="object-fit: contain;" alt="${p.Product}" />
+                        </div>
+                        <div class="card-body p-4 d-flex flex-column justify-content-between">
+                            <h5 class="card-title fw-bold text-ac-blue mb-2">${p.Product}</h5>
+                            <div>
+                                <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                                    <span class="text-muted small">Precio</span>
+                                    <span class="fw-bold text-ac-red h5 mb-0">${p.Price}</span>
+                                </div>
+                                <button type="button" class="btn btn-outline-dark w-100 mt-3 fw-bold" data-bs-toggle="modal" data-bs-target="#modal${i}">
+                                    Mostrar más detalles
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="modal${i}" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header"><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+                            <div class="modal-body p-4">
+                                <div class="row align-items-center">
+                                    <div class="col-md-5"><img src="${p.img || '/img/ACclimaslogo.jpg'}" class="img-fluid" /></div>
+                                    <div class="col-md-7">
+                                        <h3>${p.Product}</h3>
+                                        <p class="text-muted">${p.Description}</p>
+                                        <p class="fw-bold text-ac-red fs-4">${p.Price}</p>
+                                        <a href="https://wa.me/14093549300?text=Me%20interesa:%20${encodeURIComponent(p.Product)}" class="btn btn-whatsapp-custom w-100">Solicitar Cotización</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        } catch (e) {
+            grid.innerHTML = '<p class="text-danger">Error al cargar productos.</p>';
+        }
+    }
+
+    cargarProductos();
+</script>
