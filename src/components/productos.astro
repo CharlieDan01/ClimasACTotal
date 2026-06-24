@@ -16,29 +16,21 @@
 </section>
 
 <script>
-    const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQjFlIqlgR9G13ldqNX5EevnC4LGNCBBmf30i7wRVLc69NjGmORr4gh6fPney9eZJwY1J58IaVrKhXK/pub?gid=0&single=true&output=csv';
+    // PEGA AQUÍ TU ENLACE DE SHEETDB
+    const SHEET_URL = 'https://sheetdb.io/api/v1/6lg1ixjc5u606'; 
     const grid = document.getElementById('productos-grid');
 
     async function cargarProductos() {
         try {
             const response = await fetch(SHEET_URL);
-            const csvText = await response.text();
-            const lines = csvText.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-            const headers = lines[0].split(',');
+            const productos = await response.json(); // ¡Aquí está la magia del JSON!
             
-            const productos = lines.slice(1).map(line => {
-                const values = line.split(',');
-                const obj: any = {};
-                headers.forEach((h, i) => obj[h.trim()] = values[i]?.replace(/^"|"$/g, '').trim() || '');
-                return obj;
-            });
-
             // Renderizado dinámico
             grid.innerHTML = productos.map((p, i) => `
                 <div class="col-12 col-md-4 text-start">
                     <div class="card h-100 shadow-sm border-0 service-item" style="border-top: 4px solid var(--ac-blue);">
                         <div class="product-img-wrapper" style="height: 220px; overflow: hidden; display: flex; align-items: center; justify-content: center; padding: 10px;">
-                            <img src="${p.img || '/img/ACclimaslogo.jpg'}" class="w-100 h-100" style="object-fit: contain;" alt="${p.Product}" />
+                            <img src="${p.img || '/img/aCclimaslogo.png'}" class="w-100 h-100" style="object-fit: contain;" alt="${p.Product}" />
                         </div>
                         <div class="card-body p-4 d-flex flex-column justify-content-between">
                             <h5 class="card-title fw-bold text-ac-blue mb-2">${p.Product}</h5>
@@ -60,7 +52,7 @@
                             <div class="modal-header"><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
                             <div class="modal-body p-4">
                                 <div class="row align-items-center">
-                                    <div class="col-md-5"><img src="${p.img || '/img/ACclimaslogo.jpg'}" class="img-fluid" /></div>
+                                    <div class="col-md-5"><img src="${p.img || '/img/aCclimaslogo.png'}" class="img-fluid" /></div>
                                     <div class="col-md-7">
                                         <h3>${p.Product}</h3>
                                         <p class="text-muted">${p.Description}</p>
